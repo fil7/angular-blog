@@ -1,0 +1,13 @@
+<div class="card">
+  <div class="card__header">
+    <h2>Post Title</h2>
+    <small>{{ currentDate | date}}</small>
+  </div>
+  <div>
+    <small>Maria F.</small>
+  </div>
+  <button
+    [routerLink]="['/post', 123]"
+    class="btn btn-dark"
+  >View</button>
+</div>
