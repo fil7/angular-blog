@@ -1,1 +1,49 @@
-<p>login-page works!</p>
+<form
+  class="card"
+  [formGroup]="form"
+  (ngSubmit)="submit()"
+>
+  <h2>Login to Admin Panel </h2>
+
+  <div
+    class="form-control"
+    [ngClass]="{ invalid: isInvalidControl('email') }"
+  >
+    <label for="email">Email:</label>
+    <input id="email" type="email" formControlName="email">
+    <div
+      *ngIf="isInvalidControl('email')"
+      class="validation"
+    >
+      <small *ngIf="emailControl?.errors.required">Required field</small>
+      <small *ngIf="emailControl?.errors.email">Incorrect email</small>
+    </div>
+  </div>
+
+  <div
+    class="form-control"
+
+    [ngClass]="{ invalid: isInvalidControl('password') }"
+  >
+    <label for="password">Password:</label>
+    <input id="password" type="password" formControlName="password">
+    <div
+      class="validation"
+      *ngIf="isInvalidControl('password')"
+    >
+      <small *ngIf="passwordControl?.errors.required">Required field</small>
+      <small *ngIf="passwordControl?.errors.minlength">
+        The password has to contain at least
+        {{ passwordControl?.errors.minlength.requiredLength }}
+        numbers.
+      </small>
+    </div>
+  </div>
+  <button
+    type="submit"
+    class="btn btn-primary"
+    [disabled]="form.touched && form.invalid"
+  > Log in
+  </button>
+</form>
+
