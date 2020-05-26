@@ -1,8 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
+
+import { finalize } from 'rxjs/operators';
+
 import { User } from '../../shared/interfaces';
 import { AuthService } from '../../shared/services/auth.service';
-import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-login-page',
@@ -12,11 +16,13 @@ import { Router } from '@angular/router';
 export class LoginPageComponent implements OnInit {
 
   form!: FormGroup;
+  isLoading: boolean;
 
   constructor(
     private auth: AuthService,
     private router: Router
   ) {
+    this.isLoading = false;
   }
 
   get emailControl(): AbstractControl | null {
@@ -35,12 +41,15 @@ export class LoginPageComponent implements OnInit {
   }
 
   submit(): void {
-
+    this.isLoading = true;
     if (this.form.valid) {
-      const { email, password } = this.form.value;
-      const user: User = { email, password };
+      const {email, password} = this.form.value;
+      const user: User = {email, password};
 
       this.auth.login(user)
+        .pipe(
+          finalize(() => this.isLoading = false)
+        )
         .subscribe(() => {
           this.form.reset();
           this.router.navigate([ '/admin', 'dashboard' ]);
